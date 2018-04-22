@@ -1,0 +1,104 @@
+{
+  "Bus" : [ null, {
+    "id_bus" : 1,
+    "id_rute" : 1
+  } ],
+  "Rute" : [ null, {
+    "destination" : "大北窑东",
+    "id_rute" : 26,
+    "id_station" : "1,2,4",
+    "origin" : "四惠枢纽站"
+  } ],
+  "Station" : [ null, {
+    "id_station" : 1,
+    "latitude" : 0,
+    "longitude" : 0,
+    "name" : "四惠枢纽站"
+  }, {
+    "id_station" : 2,
+    "latitude" : 0,
+    "longitude" : 0,
+    "name" : "八王坟西"
+  }, {
+    "id_station" : 3,
+    "latitude" : 0,
+    "longitude" : 0,
+    "name" : "郎家园"
+  }, {
+    "id_station" : 4,
+    "latitude" : 0,
+    "longitude" : 0,
+    "name" : "大北窑东"
+  } ],
+  "User" : {
+    "1" : {
+      "email" : "bismillah@gmail.com",
+      "id_bus" : 1,
+      "id_user" : 1,
+      "image" : "https://firebasestorage.googleapis.com/v0/b/bustracking-26709.appspot.com/o/user%2F220px-Beijing_Institute_of_Technology_logo.png?alt=media&token=5f95950a-37e4-4026-9ef4-60968743147d",
+      "name" : "bismillah",
+      "phone" : "08",
+      "role" : "driver"
+    },
+    "2" : {
+      "email" : "vikar",
+      "id_bus" : 0,
+      "id_user" : 2,
+      "image" : "https://firebasestorage.googleapis.com/v0/b/bustracking-26709.appspot.com/o/user%2F220px-Beijing_Institute_of_Technology_logo.png?alt=media&token=5f95950a-37e4-4026-9ef4-60968743147d",
+      "name" : "vikar",
+      "phone" : "08",
+      "role" : "user"
+    },
+    "-L7OprolKY_XgJttyoQg" : {
+      "email" : "zainvikar@gmail.com",
+      "id_bus" : 0,
+      "id_user" : 1520851975031,
+      "image" : "https://firebasestorage.googleapis.com/v0/b/bustracking-26709.appspot.com/o/user%2F220px-Beijing_Institute_of_Technology_logo.png?alt=media&token=5f95950a-37e4-4026-9ef4-60968743147d",
+      "name" : "vikar",
+      "phone" : "08",
+      "role" : "user"
+    },
+    "-L7OrCUG9KEufkYSBOCh" : {
+      "email" : "bismillah@ymail.com",
+      "id_bus" : 0,
+      "id_user" : 1520852326109,
+      "image" : "https://firebasestorage.googleapis.com/v0/b/bustracking-26709.appspot.com/o/user%2F220px-Beijing_Institute_of_Technology_logo.png?alt=media&token=5f95950a-37e4-4026-9ef4-60968743147d",
+      "name" : "bismillah",
+      "phone" : "08",
+      "role" : "user"
+    },
+    "-L7Uh2ynDCl5CnQIGdGY" : {
+      "email" : "mega@gmail.com",
+      "id_bus" : 0,
+      "id_user" : 1520950328671,
+      "image" : "https://firebasestorage.googleapis.com/v0/b/bustracking-26709.appspot.com/o/user%2F220px-Beijing_Institute_of_Technology_logo.png?alt=media&token=5f95950a-37e4-4026-9ef4-60968743147d",
+      "name" : "mega",
+      "phone" : "08",
+      "role" : "user"
+    },
+    "-LAfN51JmeuhJTWUintg" : {
+      "email" : "arrival@gmail.com",
+      "id_bus" : 0,
+      "id_user" : 1524367384462,
+      "image" : "https://firebasestorage.googleapis.com/v0/b/bustracking-26709.appspot.com/o/user%2F220px-Beijing_Institute_of_Technology_logo.png?alt=media&token=5f95950a-37e4-4026-9ef4-60968743147d",
+      "name" : "arrival",
+      "phone" : "08",
+      "role" : "user"
+    },
+    "-LAgXNiwcYVZsCNEoL-s" : {
+      "email" : "sentosa@gmail.com",
+      "id_bus" : 0,
+      "id_user" : 1524386859366,
+      "image" : "https://firebasestorage.googleapis.com/v0/b/bustracking-26709.appspot.com/o/user%2F1524386854196.jpg?alt=media&token=993a02d9-2c09-46d7-b696-897cd5ffeb7b",
+      "name" : "sentosa",
+      "phone" : "085",
+      "role" : "user"
+    }
+  },
+  "track" : [ null, {
+    "id_bus" : 1,
+    "id_user" : 1,
+    "latitude" : 0,
+    "longitude" : 0
+  } ]
+}

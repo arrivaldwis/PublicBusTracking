@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#f9f8f8"
+    tools:context="com.example.vikar.publicbustracking.fragment.BusTracking">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#1ce192"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:text="BUS TRACKING"
+            android:textAlignment="center"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f2eaea"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/svCari"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            android:background="#e7e1e1"
+            android:hint="Type Your Destination Station"
+            android:padding="12dp"
+            android:drawableLeft="@drawable/ic_search_black_24dp"
+            android:drawableTint="#868686"/>
+    </LinearLayout>
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+</LinearLayout>

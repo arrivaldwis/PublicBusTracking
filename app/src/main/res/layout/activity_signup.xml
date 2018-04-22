@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f9f8f8"
+    android:orientation="vertical"
+    tools:context="com.example.vikar.publicbustracking.activity.login">
+
+    <LinearLayout
+        android:id="@+id/rlToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/pbt" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="25dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#dfd8d8"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="#1ce192"
+                    android:gravity="center"
+                    android:text="Create Your Account"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/img_user"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_photo_camera_black_24dp" />
+
+                <EditText
+                    android:id="@+id/txtusername"
+                    android:layout_width="270dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:hint="Username"
+                    android:textAlignment="center"
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/txtemail"
+                    android:layout_width="270dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:hint="Email"
+                    android:textAlignment="center"
+                    android:textSize="16dp" />
+
+                <EditText
+                    android:id="@+id/txtphone"
+                    android:layout_width="270dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:hint="Phone"
+                    android:textAlignment="center"
+                    android:textSize="16dp"
+                    android:inputType="number"/>
+
+                <EditText
+                    android:id="@+id/txtpassword"
+                    android:layout_width="270dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:textAlignment="center"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/showpass"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="23dp"
+                    android:text="Show Password"
+                    android:textSize="12dp" />
+
+                <Button
+                    android:id="@+id/btnlogin"
+                    android:layout_width="270dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:backgroundTint="#3fffb2"
+                    android:text="Sign Up"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Supported By:"
+                android:textAlignment="center"
+                android:textSize="20dp"
+                android:layout_marginTop="10dp"/>
+
+            <ImageView
+                android:layout_width="130dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/bit_mercu1"
+                android:layout_marginBottom="30dp"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

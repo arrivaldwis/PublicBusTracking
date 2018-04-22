@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_route"
+        android:icon="@drawable/rute"
+        android:title="Route"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/navigation_bustracking"
+        android:icon="@drawable/unnamed"
+        android:title="Bus Tracking"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/navigation_maps"
+        android:icon="@drawable/maps"
+        android:title="Maps"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="Profile"
+        app:showAsAction="always|withText" />
+
+</menu>
