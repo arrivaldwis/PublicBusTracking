@@ -36,19 +36,64 @@
                 android:layout_gravity="center">
 
                 <TextView
-                    android:id="@+id/tv_rute"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Rute -> Rute 2"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:text="Bus Route:"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginBottom="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/origin"/>
+                    <TextView
+                        android:id="@+id/tv_origin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rute"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="10dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/dest"/>
+                    <TextView
+                        android:id="@+id/tv_destination"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Rute 2"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="10dp"/>
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tv_rute_search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rute -> Rute 2"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/tv_past"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Past 20 Stations"
+                    android:textColor="@color/ef_grey"
+                    android:layout_marginTop="10dp"/>
             </LinearLayout>
 
         </LinearLayout>

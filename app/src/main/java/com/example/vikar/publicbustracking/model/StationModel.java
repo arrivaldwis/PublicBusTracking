@@ -2,14 +2,14 @@ package com.example.vikar.publicbustracking.model;
 
 public class StationModel {
     int id_station;
-    int latitude;
-    int longitude;
+    double latitude;
+    double longitude;
     String name;
 
     public StationModel() {
     }
 
-    public StationModel(int id_station, int latitude, int longitude, String name) {
+    public StationModel(int id_station, double latitude, double longitude, String name) {
         this.id_station = id_station;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -24,15 +24,15 @@ public class StationModel {
         this.id_station = id_station;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(int latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 

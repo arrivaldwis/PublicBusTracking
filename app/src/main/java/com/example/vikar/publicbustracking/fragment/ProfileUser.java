@@ -2,6 +2,7 @@ package com.example.vikar.publicbustracking.fragment;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,8 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.esafirm.imagepicker.features.ImagePicker;
+import com.esafirm.imagepicker.features.ReturnMode;
 import com.example.vikar.publicbustracking.R;
 import com.example.vikar.publicbustracking.activity.login;
+import com.example.vikar.publicbustracking.activity.signup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
@@ -29,7 +33,7 @@ public class ProfileUser extends Fragment implements View.OnClickListener {
     private EditText tv_name;
     private EditText tv_email;
     private EditText tv_phone;
-    private ImageView img_user;
+    public static ImageView img_user;
 
     public ProfileUser() {
         // Required empty public constructor
@@ -62,6 +66,7 @@ public class ProfileUser extends Fragment implements View.OnClickListener {
         img_user = (ImageView) v.findViewById(R.id.img_user);
 
         btnLogout.setOnClickListener(this);
+        img_user.setOnClickListener(this);
         loadProfile();
         return v;
     }
@@ -73,6 +78,20 @@ public class ProfileUser extends Fragment implements View.OnClickListener {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(getActivity(), login.class));
                 getActivity().finish();
+                break;
+            case R.id.img_user:
+                ImagePicker.create(getActivity())
+                        .returnMode(ReturnMode.ALL) // set whether pick and / or camera action should return immediate result or not.
+                        .folderMode(true) // folder mode (false by default)
+                        .toolbarFolderTitle("Folder") // folder selection title
+                        .toolbarImageTitle("Tap to select") // image selection title
+                        .toolbarArrowColor(Color.WHITE) // Toolbar 'up' arrow color
+                        .single() // single mode
+                        .limit(1) // max images can be selected (99 by default)
+                        .showCamera(true) // show camera or not (true by default)
+                        .imageDirectory("Camera") // directory name for captured image  ("Camera" folder by default)
+                        .enableLog(false) // disabling log
+                        .start(); // start image picker activity with request code
                 break;
         }
     }

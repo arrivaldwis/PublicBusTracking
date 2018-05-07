@@ -18,7 +18,7 @@
             android:background="#1ce192"
             android:layout_marginTop="5dp"
             android:layout_weight="1"
-            android:text="BUS TRACKING"
+            android:text="MAPS"
             android:textAlignment="center"
             android:textSize="18dp"
             android:textStyle="bold" />

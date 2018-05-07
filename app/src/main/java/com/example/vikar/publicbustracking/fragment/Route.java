@@ -1,6 +1,7 @@
 package com.example.vikar.publicbustracking.fragment;
 
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.example.vikar.publicbustracking.Constant;
 import com.example.vikar.publicbustracking.R;
@@ -33,10 +37,12 @@ import java.util.ArrayList;
  */
 public class Route extends Fragment {
 
-    private EditText svCari;
+    private AutoCompleteTextView svOrigin;
+    private AutoCompleteTextView svDestination;
     private RecyclerView rvData;
     private ArrayList<RuteModel> ruteList;
     private ArrayList<StationModel> stationList;
+    private ArrayList<String> stationListString;
     private RouteAdapter mAdapter;
 
     public Route() {
@@ -54,9 +60,11 @@ public class Route extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_route, container, false);
         stationList = new ArrayList<>();
+        stationListString = new ArrayList<>();
         ruteList = new ArrayList<>();
 
-        svCari = (EditText) v.findViewById(R.id.svCari);
+        svOrigin = (AutoCompleteTextView) v.findViewById(R.id.svOrigin);
+        svDestination = (AutoCompleteTextView) v.findViewById(R.id.svDestination);
         rvData = (RecyclerView) v.findViewById(R.id.rvData);
 
         LinearLayoutManager llManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -64,9 +72,12 @@ public class Route extends Fragment {
         mAdapter = new RouteAdapter(getActivity(), ruteList, stationList);
         rvData.setAdapter(mAdapter);
         loadStation();
-        loadRoute("");
+        loadRoute("", "");
 
-        svCari.addTextChangedListener(new TextWatcher() {
+        svOrigin.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, stationListString));
+        svDestination.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, stationListString));
+
+        svOrigin.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -74,12 +85,33 @@ public class Route extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                loadRoute(svCari.getText().toString());
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if(!svDestination.getText().toString().isEmpty()) {
+                    loadRoute(editable.toString(), svDestination.getText().toString());
+                }
+            }
+        });
 
+        svDestination.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(!svOrigin.getText().toString().isEmpty()) {
+                    loadRoute(svOrigin.getText().toString(), editable.toString());
+                }
             }
         });
 
@@ -93,6 +125,7 @@ public class Route extends Fragment {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     StationModel rute = ds.getValue(StationModel.class);
                     stationList.add(rute);
+                    stationListString.add(rute.getName());
                 }
             }
 
@@ -103,14 +136,14 @@ public class Route extends Fragment {
         });
     }
 
-    private void loadRoute(final String filter) {
+    private void loadRoute(final String origin, final String destination) {
         Constant.refRute.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ruteList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     RuteModel rute = ds.getValue(RuteModel.class);
-                    if(rute.getDestination().contains(filter)) {
+                    if(rute.getOrigin().contains(origin) && rute.getDestination().contains(destination)) {
                         ruteList.add(rute);
                         mAdapter.notifyDataSetChanged();
                     }
@@ -123,5 +156,4 @@ public class Route extends Fragment {
             }
         });
     }
-
 }

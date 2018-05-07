@@ -51,7 +51,7 @@ public class signup extends AppCompatActivity {
     private CheckBox check;
     private ProgressDialog pDialog;
     private ImageView img_user;
-    private StorageReference refPhotoProfile;
+    public static StorageReference refPhotoProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

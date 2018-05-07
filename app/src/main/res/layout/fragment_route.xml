@@ -31,22 +31,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#f2eaea"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-        <EditText
-            android:id="@+id/svCari"
-            android:layout_width="match_parent"
+        <AutoCompleteTextView
+            android:id="@+id/svOrigin"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="30dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical"
+            android:background="#e7e1e1"
+            android:hint="Origin"
+            android:padding="12dp"/>
+
+        <AutoCompleteTextView
+            android:id="@+id/svDestination"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:background="#e7e1e1"
-            android:hint="Type Your Destination Station"
-            android:padding="12dp"
-            android:drawableLeft="@drawable/ic_search_black_24dp"
-            android:drawableTint="#868686"/>
+            android:hint="Destination"
+            android:padding="12dp"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
