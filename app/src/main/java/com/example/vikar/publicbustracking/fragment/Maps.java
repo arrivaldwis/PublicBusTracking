@@ -18,6 +18,7 @@ import com.example.vikar.publicbustracking.Constant;
 import com.example.vikar.publicbustracking.R;
 import com.example.vikar.publicbustracking.model.RuteModel;
 import com.example.vikar.publicbustracking.model.StationModel;
+import com.github.lzyzsd.randomcolor.RandomColor;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -64,6 +65,7 @@ public class Maps extends Fragment implements OnMapReadyCallback {
 
     LatLng stationMarker = null;
     ArrayList<LatLng> stationsList = new ArrayList<>();
+    int warna = 0;
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -72,9 +74,9 @@ public class Maps extends Fragment implements OnMapReadyCallback {
         Constant.refRute.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                for (final DataSnapshot ds: dataSnapshot.getChildren()) {
                     stationsList.clear();
-                    RuteModel rute = ds.getValue(RuteModel.class);
+                    final RuteModel rute = ds.getValue(RuteModel.class);
 
                     final String[] stationList = rute.getId_station().split(",");
                     for (String s:stationList) {
@@ -91,15 +93,15 @@ public class Maps extends Fragment implements OnMapReadyCallback {
                                     if(String.valueOf(model.getId_station()).equals(s)) {
                                         stationsList.add(new LatLng(model.getLatitude(), model.getLongitude()));
                                         stationMarker = new LatLng(model.getLatitude(), model.getLongitude());
-                                        mMap.addMarker(new MarkerOptions().position(stationMarker).title(model.getName()).snippet("Station Id: "+model.getId_station()));
+                                        mMap.addMarker(new MarkerOptions().position(stationMarker).title(model.getName()).snippet("Bus Route No: "+rute.getId_rute()));
                                     }
                                 }
                             }
 
-                            Random rnd = new Random();
-                            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                            RandomColor rnd = new RandomColor();
+                            int[] color = rnd.randomColor((int) ds.getChildrenCount());
 
-                            PolylineOptions options = new PolylineOptions().width(5).color(color).geodesic(true);
+                            PolylineOptions options = new PolylineOptions().width(5).color(color[warna]).geodesic(true);
                             for (int z = 0; z < stationsList.size(); z++) {
                                 LatLng point = stationsList.get(z);
                                 options.add(point);
@@ -107,7 +109,7 @@ public class Maps extends Fragment implements OnMapReadyCallback {
 
                             mMap.addPolyline(options);
 
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(stationMarker));
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(stationMarker, 15.0f));
                         }
 
                         @Override
@@ -115,6 +117,7 @@ public class Maps extends Fragment implements OnMapReadyCallback {
 
                         }
                     });
+                    warna++;
                 }
             }
 
