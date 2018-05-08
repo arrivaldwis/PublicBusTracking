@@ -24,6 +24,9 @@ import com.example.vikar.publicbustracking.Constant;
 import com.example.vikar.publicbustracking.R;
 import com.example.vikar.publicbustracking.model.TrackModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -93,15 +96,31 @@ public class Driver extends AppCompatActivity {
     private class MyLocationListener implements LocationListener {
 
         @Override
-        public void onLocationChanged(Location loc) {
+        public void onLocationChanged(final Location loc) {
             if (status) {
                 Toast.makeText(getBaseContext(),
                         "Location changed: Lat: " + loc.getLatitude() + " Lng: "
                                 + loc.getLongitude(), Toast.LENGTH_SHORT).show();
 
-                Constant.refTrack.push().setValue(new TrackModel(Integer.parseInt(id),
-                        Integer.parseInt(id_bus), loc.getLatitude(), loc.getLongitude()));
+                Constant.refTrack.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds:dataSnapshot.getChildren()) {
+                            TrackModel model = ds.getValue(TrackModel.class);
+                            if(String.valueOf(model.getId_user()).equals(id)) {
+                                Constant.refTrack.child(ds.getKey()).setValue(new TrackModel(
+                                    model.getId_bus(), model.getId_track(), model.getId_user(),
+                                        loc.getLatitude(), loc.getLongitude()
+                                ));
+                            }
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
             //handlePostion(loc);
         }

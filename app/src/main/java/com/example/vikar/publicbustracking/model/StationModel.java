@@ -36,7 +36,7 @@ public class StationModel {
         return longitude;
     }
 
-    public void setLongitude(int longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

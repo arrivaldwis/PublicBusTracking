@@ -3,6 +3,7 @@ package com.example.vikar.publicbustracking.model;
 public class TrackModel {
     int id_bus;
     int id_user;
+    int id_track;
     double latitude;
     double longitude;
 
@@ -10,11 +11,20 @@ public class TrackModel {
 
     }
 
-    public TrackModel(int id_bus, int id_user, double latitude, double longitude) {
+    public TrackModel(int id_bus, int id_track, int id_user, double latitude, double longitude) {
         this.id_bus = id_bus;
         this.id_user = id_user;
+        this.id_track = id_track;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public int getId_track() {
+        return id_track;
+    }
+
+    public void setId_track(int id_track) {
+        this.id_track = id_track;
     }
 
     public int getId_bus() {
