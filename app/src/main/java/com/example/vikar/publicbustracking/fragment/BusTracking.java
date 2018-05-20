@@ -13,6 +13,9 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.vikar.publicbustracking.Constant;
@@ -30,13 +33,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class BusTracking extends Fragment implements OnMapReadyCallback {
 
+    private AutoCompleteTextView tvBus;
+    private Button btnTrack;
     private GoogleMap mMap;
+    private ArrayList<String> busList;
+    private ArrayAdapter<String> adapter;
 
     public BusTracking() {
         // Required empty public constructor
@@ -53,10 +62,44 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bus_tracking, container, false);
+        busList = new ArrayList<>();
+        tvBus = v.findViewById(R.id.tvBus);
+        btnTrack = v.findViewById(R.id.btnTrack);
+        btnTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                trackBus(Integer.parseInt(tvBus.getText().toString()));
+            }
+        });
+
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        loadBus();
+
         return v;
+    }
+
+    private void loadBus() {
+        adapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, busList);
+
+        Constant.refBus.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                    BusModel model = ds.getValue(BusModel.class);
+                    busList.add(model.getId_bus()+"");
+                }
+
+                tvBus.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -78,10 +121,10 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
             mMap.setMyLocationEnabled(true);
         }
 
-        trackBus(26);
     }
 
     private void trackBus(final int id_bus) {
+        mMap.clear();
         Constant.refBus.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -97,12 +140,15 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
                                         Constant.refTrack.addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
+                                                mMap.clear();
                                                 for (DataSnapshot ds:dataSnapshot.getChildren()) {
                                                     TrackModel track = ds.getValue(TrackModel.class);
                                                     if(track.getId_bus() == model.getId_bus()) {
                                                         mMap.addMarker(new MarkerOptions()
-                                                                .position(new LatLng(track.getLatitude(), track.getLongitude())));
+                                                                .position(new LatLng(track.getLatitude(), track.getLongitude()))
+                                                                .title(model.getId_bus()+"").snippet("Bus Route No: "+model.getId_rute()));
                                                         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(track.getLatitude(), track.getLongitude())));
+                                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(track.getLatitude(), track.getLongitude()), 15.0f));
                                                     }
                                                 }
                                             }

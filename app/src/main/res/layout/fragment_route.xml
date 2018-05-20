@@ -32,34 +32,42 @@
         android:layout_height="wrap_content"
         android:background="#f2eaea"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="5">
 
         <AutoCompleteTextView
             android:id="@+id/svOrigin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_marginBottom="5dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:background="#e7e1e1"
-            android:hint="Origin"
+            android:hint="From"
             android:padding="12dp"/>
 
         <AutoCompleteTextView
             android:id="@+id/svDestination"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
             android:orientation="vertical"
             android:background="#e7e1e1"
-            android:hint="Destination"
+            android:hint="To"
             android:padding="12dp"/>
+
+        <ImageView
+            android:id="@+id/btnSearch"
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_search_black_24dp"/>
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView

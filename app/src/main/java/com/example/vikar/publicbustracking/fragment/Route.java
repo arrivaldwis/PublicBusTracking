@@ -16,12 +16,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.vikar.publicbustracking.Constant;
 import com.example.vikar.publicbustracking.R;
 import com.example.vikar.publicbustracking.adapter.RouteAdapter;
+import com.example.vikar.publicbustracking.model.BusModel;
 import com.example.vikar.publicbustracking.model.RuteModel;
 import com.example.vikar.publicbustracking.model.StationModel;
 import com.example.vikar.publicbustracking.model.UserModel;
@@ -39,6 +41,7 @@ public class Route extends Fragment {
 
     private AutoCompleteTextView svOrigin;
     private AutoCompleteTextView svDestination;
+    private ImageView btnSearch;
     private RecyclerView rvData;
     private ArrayList<RuteModel> ruteList;
     private ArrayList<StationModel> stationList;
@@ -66,6 +69,7 @@ public class Route extends Fragment {
         svOrigin = (AutoCompleteTextView) v.findViewById(R.id.svOrigin);
         svDestination = (AutoCompleteTextView) v.findViewById(R.id.svDestination);
         rvData = (RecyclerView) v.findViewById(R.id.rvData);
+        btnSearch = (ImageView) v.findViewById(R.id.btnSearch);
 
         LinearLayoutManager llManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rvData.setLayoutManager(llManager);
@@ -77,40 +81,14 @@ public class Route extends Fragment {
         svOrigin.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, stationListString));
         svDestination.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, stationListString));
 
-        svOrigin.addTextChangedListener(new TextWatcher() {
+        btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!svDestination.getText().toString().isEmpty()) {
-                    loadRoute(editable.toString(), svDestination.getText().toString());
-                }
-            }
-        });
-
-        svDestination.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if(!svOrigin.getText().toString().isEmpty()) {
-                    loadRoute(svOrigin.getText().toString(), editable.toString());
+            public void onClick(View view) {
+                if(!svDestination.getText().toString().isEmpty() &&
+                        !svOrigin.getText().toString().isEmpty()) {
+                    loadRoute(svOrigin.getText().toString(), svDestination.getText().toString());
+                } else {
+                    loadRoute("","");
                 }
             }
         });
@@ -142,11 +120,42 @@ public class Route extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ruteList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    RuteModel rute = ds.getValue(RuteModel.class);
+                    final RuteModel rute = ds.getValue(RuteModel.class);
                     if(rute.getOrigin().contains(origin) && rute.getDestination().contains(destination)) {
                         ruteList.add(rute);
                         mAdapter.notifyDataSetChanged();
                     }
+
+                    final String[] stations = rute.getId_station().split(",");
+                    Constant.refStation.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds:dataSnapshot.getChildren()) {
+                                StationModel model = ds.getValue(StationModel.class);
+
+                                for (String s:stations) {
+                                    Log.d("stasiun", s);
+                                    if (model.getId_station() == Integer.parseInt(s)) {
+                                        Log.d("stasiun", model.getName());
+                                        if(rute.getOrigin().contains(origin)) {
+                                            ruteList.add(rute);
+                                            mAdapter.notifyDataSetChanged();
+                                            return;
+                                        }else if(rute.getDestination().contains(destination)) {
+                                            ruteList.add(rute);
+                                            mAdapter.notifyDataSetChanged();
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             }
 

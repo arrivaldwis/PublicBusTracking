@@ -28,22 +28,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#f2eaea"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:padding="8dp">
 
-        <EditText
-            android:id="@+id/svCari"
-            android:layout_width="match_parent"
+        <AutoCompleteTextView
+            android:id="@+id/tvBus"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical"
-            android:background="#e7e1e1"
-            android:hint="Type Your Destination Station"
-            android:padding="12dp"
-            android:drawableLeft="@drawable/ic_search_black_24dp"
-            android:drawableTint="#868686"/>
+            android:layout_weight="2"
+            android:inputType="number"
+            android:hint="Input bus no"/>
+        <Button
+            android:id="@+id/btnTrack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Track"/>
     </LinearLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
