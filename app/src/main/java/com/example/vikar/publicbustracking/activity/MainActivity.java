@@ -60,11 +60,12 @@ public class MainActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = getSharedPreferences("userSession", MODE_PRIVATE).edit();
                         editor.putString("email", email);
                         editor.putString("role", role);
-                        editor.putString("id", user.getId_user()+"");
-                        editor.putString("image", user.getImage()+"");
+                        editor.putString("id", user.getId_user() + "");
+                        editor.putString("image", user.getImage() + "");
                         editor.putString("name", user.getName());
-                        editor.putString("phone", user.getPhone()+"");
-                        if(role.equals("driver")) editor.putString("id_bus", user.getId_bus()+"");
+                        editor.putString("phone", user.getPhone() + "");
+                        if (role.equals("driver"))
+                            editor.putString("id_bus", user.getId_bus() + "");
                         editor.apply();
                     }
                 }
@@ -88,5 +89,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, Menu.class));
         if (role.equals("driver"))
             startActivity(new Intent(MainActivity.this, Driver.class));
+
+        finish();
     }
 }

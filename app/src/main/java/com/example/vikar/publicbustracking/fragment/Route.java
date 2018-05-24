@@ -137,11 +137,11 @@ public class Route extends Fragment {
                                     Log.d("stasiun", s);
                                     if (model.getId_station() == Integer.parseInt(s)) {
                                         Log.d("stasiun", model.getName());
-                                        if(rute.getOrigin().contains(origin)) {
+                                        if(rute.getOrigin().equals(origin)) {
                                             ruteList.add(rute);
                                             mAdapter.notifyDataSetChanged();
                                             return;
-                                        }else if(rute.getDestination().contains(destination)) {
+                                        }else if(rute.getDestination().equals(destination)) {
                                             ruteList.add(rute);
                                             mAdapter.notifyDataSetChanged();
                                             return;

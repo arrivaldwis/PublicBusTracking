@@ -5,6 +5,9 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -27,6 +30,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -87,9 +91,9 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
         Constant.refBus.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     BusModel model = ds.getValue(BusModel.class);
-                    busList.add(model.getId_bus()+"");
+                    busList.add(model.getId_bus() + "");
                 }
 
                 tvBus.setAdapter(adapter);
@@ -116,8 +120,7 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
                 //Request Location Permission
                 checkLocationPermission();
             }
-        }
-        else {
+        } else {
             mMap.setMyLocationEnabled(true);
         }
 
@@ -128,25 +131,26 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
         Constant.refBus.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds:dataSnapshot.getChildren()) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     final BusModel model = ds.getValue(BusModel.class);
-                    if(model.getId_bus() == id_bus) {
+                    if (model.getId_bus() == id_bus) {
                         Constant.refRute.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot ds:dataSnapshot.getChildren()) {
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                     RuteModel rute = ds.getValue(RuteModel.class);
-                                    if(rute.getId_rute() == model.getId_rute()) {
+                                    if (rute.getId_rute() == model.getId_rute()) {
                                         Constant.refTrack.addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 mMap.clear();
-                                                for (DataSnapshot ds:dataSnapshot.getChildren()) {
+                                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                                     TrackModel track = ds.getValue(TrackModel.class);
-                                                    if(track.getId_bus() == model.getId_bus()) {
+                                                    if (track.getId_bus() == model.getId_bus()) {
                                                         mMap.addMarker(new MarkerOptions()
                                                                 .position(new LatLng(track.getLatitude(), track.getLongitude()))
-                                                                .title(model.getId_bus()+"").snippet("Bus Route No: "+model.getId_rute()));
+                                                                .title(model.getId_bus() + "").snippet("Bus Route No: " + model.getId_rute())
+                                                                .icon(Constant.bitmapFromDrawable(getActivity(), R.drawable.ic_directions_bus_black_24dp)));
                                                         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(track.getLatitude(), track.getLongitude())));
                                                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(track.getLatitude(), track.getLongitude()), 15.0f));
                                                     }
@@ -178,7 +182,36 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    /*private void getEstimation() {
+        try {
+            String distance = "";
+            String userLat = data.getLatitude();
+            String userLong = data.getLongitude();
+            float distanceInMeters = 0;
+            if (!userLat.isEmpty() && !userLong.isEmpty() && !latitude.isEmpty() && !longitude.isEmpty()) {
+                float[] results = new float[1];
+                Location.distanceBetween(Double.parseDouble(latitude), Double.parseDouble(longitude), Double.parseDouble(userLat), Double.parseDouble(userLong), results);
+                distanceInMeters = results[0];
+            }
+
+            try {
+                float dist = distanceInMeters / 1000;
+                distance = String.format(java.util.Locale.US, "%.2f", dist);
+            } catch (Exception ex) {
+            }
+
+            if (!userLat.isEmpty() && !userLong.isEmpty() && !latitude.isEmpty() && !longitude.isEmpty()) {
+                boolean isWithin10km = distanceInMeters < 10000;
+                if (isWithin10km) {
+                }
+                holder.tvJarak.setText(distance+" km");
+            }
+        } catch (Exception ex) {
+        }
+    }*/
+
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -199,7 +232,7 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
                                 //Prompt the user once explanation has been shown
                                 ActivityCompat.requestPermissions(getActivity(),
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_LOCATION );
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
                             }
                         })
                         .create()
@@ -210,7 +243,7 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION );
+                        MY_PERMISSIONS_REQUEST_LOCATION);
             }
         }
     }
