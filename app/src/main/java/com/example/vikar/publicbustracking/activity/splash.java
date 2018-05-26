@@ -10,6 +10,8 @@ package com.example.vikar.publicbustracking.activity;
         import android.widget.ImageView;
 
         import com.example.vikar.publicbustracking.R;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 public class splash extends AppCompatActivity {
 
@@ -31,6 +33,7 @@ public class splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash);
         imgLogo = (ImageView) findViewById(R.id.splashid);
         StartAnimation();

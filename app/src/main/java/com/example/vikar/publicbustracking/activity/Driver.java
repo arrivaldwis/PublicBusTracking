@@ -111,7 +111,7 @@ public class Driver extends AppCompatActivity {
                         .showCamera(true) // show camera or not (true by default)
                         .imageDirectory("Camera") // directory name for captured image  ("Camera" folder by default)
                         .enableLog(false) // disabling log
-                        .start(); // start image picker activity with request code\
+                        .start(); // start image picker activity with request code
             }
         });
 
@@ -200,32 +200,34 @@ public class Driver extends AppCompatActivity {
         @Override
         public void onLocationChanged(final Location loc) {
             if (status) {
-                Toast.makeText(getBaseContext(),
-                        "Location changed: Lat: " + loc.getLatitude() + " Lng: "
-                                + loc.getLongitude(), Toast.LENGTH_SHORT).show();
+                try {
+                    Toast.makeText(getBaseContext(),
+                            "Location changed: Lat: " + loc.getLatitude() + " Lng: "
+                                    + loc.getLongitude(), Toast.LENGTH_SHORT).show();
 
-                Constant.refTrack.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            TrackModel model = ds.getValue(TrackModel.class);
-                            if (String.valueOf(model.getId_user()).equals(id)) {
-                                Constant.refTrack.child(ds.getKey()).setValue(new TrackModel(
-                                        model.getId_bus(), model.getId_track(), model.getId_user(),
-                                        loc.getLatitude(), loc.getLongitude()
-                                ));
-                            } else {
-                                Constant.refTrack.push().setValue(new TrackModel(model.getId_bus(),
-                                        1, Integer.parseInt(id), loc.getLatitude(), loc.getLongitude()));
+                    Constant.refTrack.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                TrackModel model = ds.getValue(TrackModel.class);
+                                if (String.valueOf(model.getId_user()).equals(id)) {
+                                    Constant.refTrack.child(ds.getKey()).setValue(new TrackModel(
+                                            model.getId_bus(), model.getId_track(), model.getId_user(),
+                                            loc.getLatitude(), loc.getLongitude()
+                                    ));
+                                } else {
+                                    Constant.refTrack.push().setValue(new TrackModel(model.getId_bus(),
+                                            1, Integer.parseInt(id), loc.getLatitude(), loc.getLongitude()));
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+                        }
+                    });
+                } catch (Exception ex) {}
             }
             //handlePostion(loc);
         }

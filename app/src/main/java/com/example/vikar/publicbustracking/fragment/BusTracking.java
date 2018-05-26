@@ -3,11 +3,14 @@ package com.example.vikar.publicbustracking.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -50,6 +53,9 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private ArrayList<String> busList;
     private ArrayAdapter<String> adapter;
+    double longitude;
+    double latitude;
+
 
     public BusTracking() {
         // Required empty public constructor
@@ -81,8 +87,46 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
         loadBus();
 
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return null;
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
+        Location myLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        longitude = myLocation.getLongitude();
+        latitude = myLocation.getLatitude();
+
         return v;
     }
+
+    private final LocationListener locationListener = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    };
 
     private void loadBus() {
         adapter = new ArrayAdapter<String>(getActivity(),
@@ -147,12 +191,7 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
                                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                                     TrackModel track = ds.getValue(TrackModel.class);
                                                     if (track.getId_bus() == model.getId_bus()) {
-                                                        mMap.addMarker(new MarkerOptions()
-                                                                .position(new LatLng(track.getLatitude(), track.getLongitude()))
-                                                                .title(model.getId_bus() + "").snippet("Bus Route No: " + model.getId_rute())
-                                                                .icon(Constant.bitmapFromDrawable(getActivity(), R.drawable.ic_directions_bus_black_24dp)));
-                                                        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(track.getLatitude(), track.getLongitude())));
-                                                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(track.getLatitude(), track.getLongitude()), 15.0f));
+                                                        getEstimation(new LatLng(latitude, longitude), new LatLng(track.getLatitude(), track.getLongitude()), model, track);
                                                     }
                                                 }
                                             }
@@ -182,33 +221,47 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    /*private void getEstimation() {
+    float time;
+    float dist;
+
+    private String getEstimation(LatLng point1, LatLng point2, BusModel model, TrackModel track) {
+        int busAvgSpeed = 40;
+        String distance = "";
+        float distanceInMeters = 0;
+        float[] results = new float[1];
+        Location.distanceBetween(point1.latitude, point1.longitude, point2.latitude, point2.longitude, results);
+        distanceInMeters = results[0];
+
         try {
-            String distance = "";
-            String userLat = data.getLatitude();
-            String userLong = data.getLongitude();
-            float distanceInMeters = 0;
-            if (!userLat.isEmpty() && !userLong.isEmpty() && !latitude.isEmpty() && !longitude.isEmpty()) {
-                float[] results = new float[1];
-                Location.distanceBetween(Double.parseDouble(latitude), Double.parseDouble(longitude), Double.parseDouble(userLat), Double.parseDouble(userLong), results);
-                distanceInMeters = results[0];
-            }
+            dist = distanceInMeters / 1000;
+            time = dist / busAvgSpeed;
+            distance = String.format(java.util.Locale.US, "%.2f", dist);
+            String times = String.format(java.util.Locale.US, "%.2f", time*60);
 
-            try {
-                float dist = distanceInMeters / 1000;
-                distance = String.format(java.util.Locale.US, "%.2f", dist);
-            } catch (Exception ex) {
-            }
-
-            if (!userLat.isEmpty() && !userLong.isEmpty() && !latitude.isEmpty() && !longitude.isEmpty()) {
-                boolean isWithin10km = distanceInMeters < 10000;
-                if (isWithin10km) {
-                }
-                holder.tvJarak.setText(distance+" km");
-            }
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(track.getLatitude(), track.getLongitude()))
+                    .title("Bus No: " + model.getId_bus() + "").snippet("Estimated Time: " + distance + " km (" + times + " minutes)")
+                    .icon(Constant.bitmapFromDrawable(getActivity(), R.drawable.ic_directions_bus_black_24dp)));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(track.getLatitude(), track.getLongitude())));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(track.getLatitude(), track.getLongitude()), 15.0f));
         } catch (Exception ex) {
         }
-    }*/
+
+        /*boolean isWithin10km = distanceInMeters < 10000;
+        if (isWithin10km) {
+        }*/
+
+        return distance;
+    }
+
+    private String secondsToString(float pTime) {
+        final float min = pTime / 60;
+        final float sec = pTime - (min * 60);
+
+        final String strMin = (min < 10) ? "0" + min : min + "";
+        final String strSec = (sec < 10) ? "0" + sec : sec + "";
+        return String.format("%s:%s", strMin, strSec);
+    }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 

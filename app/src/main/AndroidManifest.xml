@@ -39,6 +39,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="29e28c91767de856a7620df211af41b40470e897" />
     </application>
 
 </manifest>
