@@ -1,16 +1,25 @@
 package com.example.vikar.publicbustracking.activity;
 
-        import android.content.Intent;
-        import android.graphics.PixelFormat;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.view.Window;
-        import android.view.animation.Animation;
-        import android.view.animation.AnimationUtils;
-        import android.widget.ImageView;
+import android.Manifest;
+import android.content.Intent;
+import android.graphics.PixelFormat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
-        import com.example.vikar.publicbustracking.R;
+import com.example.vikar.publicbustracking.R;
 import com.crashlytics.android.Crashlytics;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
+import java.util.List;
+
 import io.fabric.sdk.android.Fabric;
 
 public class splash extends AppCompatActivity {
@@ -36,12 +45,25 @@ public class splash extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash);
         imgLogo = (ImageView) findViewById(R.id.splashid);
+
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ).withListener(new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {/* ... */}
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
+        }).check();
+
         StartAnimation();
-        Thread splash = new Thread(){
-            public void run(){
-                try{
+        Thread splash = new Thread() {
+            public void run() {
+                try {
                     sleep(2000);
-                } catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
                     startActivity(new Intent(splash.this, login.class));
@@ -53,7 +75,7 @@ public class splash extends AppCompatActivity {
         splash.start();
     }
 
-    private void StartAnimation(){
+    private void StartAnimation() {
         Animation anim1 = AnimationUtils.loadAnimation(this, R.anim.showin);
         anim1.setStartOffset(800);
 

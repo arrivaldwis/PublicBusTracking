@@ -100,8 +100,13 @@ public class BusTracking extends Fragment implements OnMapReadyCallback {
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, locationListener);
         Location myLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-        longitude = myLocation.getLongitude();
-        latitude = myLocation.getLatitude();
+
+        try {
+            longitude = myLocation.getLongitude();
+            latitude = myLocation.getLatitude();
+        } catch (Exception ex) {
+            Toast.makeText(getActivity(), "Can't get bus location, please check your location permissions", Toast.LENGTH_SHORT).show();
+        }
 
         return v;
     }

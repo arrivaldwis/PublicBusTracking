@@ -195,6 +195,7 @@ public class Driver extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    boolean isThere = false;
     private class MyLocationListener implements LocationListener {
 
         @Override
@@ -208,17 +209,27 @@ public class Driver extends AppCompatActivity {
                     Constant.refTrack.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            isThere = false;
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                 TrackModel model = ds.getValue(TrackModel.class);
-                                if (String.valueOf(model.getId_user()).equals(id)) {
+                                Toast.makeText(Driver.this, model.getId_user()+":"+Integer.parseInt(id), Toast.LENGTH_SHORT).show();
+                                if (model.getId_user() == Integer.parseInt(id)) {
                                     Constant.refTrack.child(ds.getKey()).setValue(new TrackModel(
                                             model.getId_bus(), model.getId_track(), model.getId_user(),
                                             loc.getLatitude(), loc.getLongitude()
                                     ));
-                                } else {
-                                    Constant.refTrack.push().setValue(new TrackModel(model.getId_bus(),
-                                            1, Integer.parseInt(id), loc.getLatitude(), loc.getLongitude()));
+
+                                    isThere = true;
+                                    return;
                                 }
+
+                                if(isThere) break;
+                            }
+
+                            if(!isThere) {
+                                Constant.refTrack.push().setValue(new TrackModel(Integer.parseInt(id_bus),
+                                        1, Integer.parseInt(id), loc.getLatitude(), loc.getLongitude()));
+                                return;
                             }
                         }
 
