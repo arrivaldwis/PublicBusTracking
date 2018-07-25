@@ -134,9 +134,9 @@ public class Route extends Fragment {
                                 StationModel model = ds.getValue(StationModel.class);
 
                                 for (String s:stations) {
-                                    Log.d("stasiun", s);
+                                    Log.d("stasiunStatis", s);
                                     if (model.getId_station() == Integer.parseInt(s)) {
-                                        Log.d("stasiun", model.getName());
+                                        Log.d("stasiunEquals", model.getName());
                                         if(rute.getOrigin().equals(origin)) {
                                             ruteList.add(rute);
                                             mAdapter.notifyDataSetChanged();

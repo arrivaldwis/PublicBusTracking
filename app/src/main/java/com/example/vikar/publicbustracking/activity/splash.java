@@ -46,18 +46,6 @@ public class splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         imgLogo = (ImageView) findViewById(R.id.splashid);
 
-        Dexter.withActivity(this)
-                .withPermissions(
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                ).withListener(new MultiplePermissionsListener() {
-            @Override
-            public void onPermissionsChecked(MultiplePermissionsReport report) {/* ... */}
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {/* ... */}
-        }).check();
-
         StartAnimation();
         Thread splash = new Thread() {
             public void run() {

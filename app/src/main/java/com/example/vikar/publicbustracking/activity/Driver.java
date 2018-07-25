@@ -195,7 +195,9 @@ public class Driver extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    boolean isThere = false;
+    boolean isFirst = false;
+    private String key;
+
     private class MyLocationListener implements LocationListener {
 
         @Override
@@ -206,55 +208,73 @@ public class Driver extends AppCompatActivity {
                             "Location changed: Lat: " + loc.getLatitude() + " Lng: "
                                     + loc.getLongitude(), Toast.LENGTH_SHORT).show();
 
-                    Constant.refTrack.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            isThere = false;
-                            for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                                TrackModel model = ds.getValue(TrackModel.class);
-                                Toast.makeText(Driver.this, model.getId_user()+":"+Integer.parseInt(id), Toast.LENGTH_SHORT).show();
-                                if (model.getId_user() == Integer.parseInt(id)) {
-                                    Constant.refTrack.child(ds.getKey()).setValue(new TrackModel(
-                                            model.getId_bus(), model.getId_track(), model.getId_user(),
-                                            loc.getLatitude(), loc.getLongitude()
-                                    ));
+                    if(!isFirst) {
+                        loadFirst(loc);
+                    } else {
+                        Constant.refTrack.child(key).setValue(new TrackModel(
+                                Integer.parseInt(id_bus), 1, Integer.parseInt(id),
+                                loc.getLatitude(), loc.getLongitude()
+                        ));
+                    }
 
-                                    isThere = true;
-                                    return;
-                                }
-
-                                if(isThere) break;
-                            }
-
-                            if(!isThere) {
-                                Constant.refTrack.push().setValue(new TrackModel(Integer.parseInt(id_bus),
-                                        1, Integer.parseInt(id), loc.getLatitude(), loc.getLongitude()));
-                                return;
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
                 } catch (Exception ex) {}
             }
-            //handlePostion(loc);
         }
 
         @Override
         public void onProviderDisabled(String provider) {
+
         }
 
         @Override
         public void onProviderEnabled(String provider) {
+
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
 
         }
+    }
+
+    private boolean isThere = false;
+
+    private void loadFirst(final Location loc) {
+        isFirst = true;
+        Constant.refTrack.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                isThere = false;
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    TrackModel model = ds.getValue(TrackModel.class);
+                    Toast.makeText(Driver.this, model.getId_user()+":"+Integer.parseInt(id), Toast.LENGTH_SHORT).show();
+                    if (model.getId_user() == Integer.parseInt(id)) {
+                        key = ds.getKey();
+                        Constant.refTrack.child(ds.getKey()).setValue(new TrackModel(
+                                model.getId_bus(), model.getId_track(), model.getId_user(),
+                                loc.getLatitude(), loc.getLongitude()
+                        ));
+
+                        isThere = true;
+                        return;
+                    }
+
+                    if(isThere) break;
+                }
+
+                if(!isThere) {
+                    key = Constant.refTrack.push().getKey();
+                    Constant.refTrack.child(key).setValue(new TrackModel(Integer.parseInt(id_bus),
+                            1, Integer.parseInt(id), loc.getLatitude(), loc.getLongitude()));
+                    return;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     String id_bus = "";
